@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class AccessDoctorDao extends Abstract implements DoctorDao {
 
-    private static final String SelectAll = "SELECT d.name,d.surname, p.name as pname"
-            + "FROM Doctor AS d "
-            + "INNER JOIN Policlinic AS p ON d.id_policlinic=p.id_policlinic";
+    private static final String SelectAll = "SELECT d.*, p.name as pname"
+            + " FROM Doctor d "
+            + " INNER JOIN Policlinic p ON d.id_policlinic=p.id_policlinic";
 
     public void updateDoctor(Doctor doctor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
