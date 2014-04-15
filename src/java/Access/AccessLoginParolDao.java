@@ -9,6 +9,8 @@ import Connection.Abstract;
 import Dao.LoginParolDao;
 import Objects.Doctor;
 import Objects.LoginParol;
+import Objects.Policlinic;
+import Objects.Worktime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,16 +28,17 @@ public class AccessLoginParolDao extends Abstract implements LoginParolDao {
     public LoginParol SelectUser(String login, String parol) {
         try (Connection con = getConn()) {
             LoginParol loginparol = new LoginParol();
-            PreparedStatement st = con.prepareStatement("select l.* ,d.*, p.name as pname , w.beginning_hour, w.ending_hour, w.worktime_name from ((LoginParol l" +
-" inner join Doctor d on  l.id_user= d.id_doctor)" +
-"inner join Policlinic p on p.id_policlinic = d.id_policlinic)" +
-" inner join Worktime w on w.id_worktime=d.id_worktime  where l.login = ? and l.parol = ?");
+            PreparedStatement st = con.prepareStatement("select l.* ,d.id_doctor, d.surname, d.name, d.patronymic, d.cabinet, d.id_policlinic,d.dbirthday,d.profile,  p.name as pname  from (LoginParol l\n"
+                    + " inner join Doctor d on  l.id_user= d.id_doctor)\n"
+                    + " inner join Policlinic p on p.id_policlinic = d.id_policlinic where l.login = ? and l.parol = ?");
             st.setString(1, login);
             st.setString(2, parol);
             ResultSet rs = st.executeQuery();
-           
+
             while (rs.next()) {
-                Doctor doctor = makeDoctor(rs,null,null);
+                Policlinic poli = new Policlinic();
+
+                Doctor doctor = makeDoctor(rs, poli);
                 loginparol.setLogin(rs.getString("login"));
                 loginparol.setParol(rs.getString("parol"));
                 loginparol.setLevel(rs.getString("level"));
@@ -43,10 +46,9 @@ public class AccessLoginParolDao extends Abstract implements LoginParolDao {
             }
             return loginparol;
         } catch (SQLException ex) {
-     
+            ex.printStackTrace();
             return null;
         }
     }
-    
 
 }

@@ -13,6 +13,7 @@ import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
 import Dao.Visit_gridDao;
+import Dao.WorktimeDao;
 import fabric.TableFactory;
 
 /**
@@ -59,5 +60,10 @@ public class AccessTableFactory extends TableFactory {
     @Override
     public LoginParolDao makeLoginParol() {
         return new AccessLoginParolDao();
+    }
+
+    @Override
+    public WorktimeDao makeWorktime() {
+        return new AccessWorktimeDao();
     }
 }

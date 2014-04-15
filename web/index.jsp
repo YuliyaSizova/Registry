@@ -15,21 +15,21 @@
     </head>
     <body>
         <%@ include file="header.jsp" %>
-        <a href="loging.jsp">Зарегистрироваться</a>
+        <p align="right"> <a href="loging.jsp">Зарегистрировать пациента</a></p>
          <form name="loging" action="LoginUser/" method="POST">
-            Введите логин (номер полиса ОМС):<br>
+            Введите логин :<br>
             <input type="text" name="username" value="" />
             <br>
-            Введите пароль (дата рождения):<br>
+            Введите пароль :<br>
             <input type="password" name="password" value="" />
             <br>
             <input type="submit" value="Войти" />
          </form>
-         <form name="Doctor's Patient List Test" action="/Registry/ShowPatientList/" method="GET">
-            Введите 7:
-            <input type="text" name="doctor_id" value="7" />
-            <br>
-            <input type="submit" value="Список пациентов доктора с данным id" />
-        </form>
+         <%-- <form name="Doctor's Patient List Test" action="/Registry/ShowPatientList/" method="GET">
+           -- Введите 7:
+        --    <input type="text" name="doctor_id" value="7" />
+        --    <br>
+         --   <input type="submit" value="Список пациентов доктора с данным id" />
+      --  </form> --%>
     </body>
 </html>

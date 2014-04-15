@@ -6,6 +6,8 @@
 
 package Objects;
 
+import java.util.Date;
+
 /**
  *
  * @author ASUS
@@ -17,8 +19,8 @@ public class Doctor {
     private String patronymic;
     private String profile;
     private Policlinic policlinic;
-    private Worktime worktime;
     private int cabinet;
+    private Date dbirthday;
 
     /**
      * @return the id_doctor
@@ -132,15 +134,19 @@ public class Doctor {
     /**
      * @return the id_worktime
      */
-    public Worktime getId_worktime() {
-        return worktime;
+ 
+    /**
+     * @return the birthday
+     */
+    public Date getDbirthday() {
+        return dbirthday;
     }
 
     /**
-     * @param id_worktime the id_worktime to set
+     * @param birthday the birthday to set
      */
-    public void setWorktime(Worktime id_worktime) {
-        this.worktime = id_worktime;
+    public void setDbirthday(Date dbirthday) {
+        this.dbirthday = dbirthday;
     }
     
 }

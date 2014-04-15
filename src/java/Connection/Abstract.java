@@ -9,10 +9,12 @@ package Connection;
  *
  * @author ASUS
  */
+import Objects.District;
 import Objects.Doctor;
 import Objects.House;
 import Objects.Patient;
 import Objects.Policlinic;
+import Objects.Street;
 import Objects.Worktime;
 import java.io.File;
 import java.io.IOException;
@@ -56,18 +58,47 @@ public abstract class Abstract {
         return policlinic;
     }
 
-    protected House makeHouse(ResultSet rs) throws SQLException {
+    protected House makeHouse(ResultSet rs, District dis, Street street, Policlinic poli) throws SQLException {
         House house = new House();
+        
+        poli.setId_policlinic(rs.getInt("id_policlinic"));
+        poli.setName(rs.getString("pname"));
+        
+        street.setId_street(rs.getInt("id_street"));
+        street.setName(rs.getString("sname"));           
+
+        dis.setDistrict_name(rs.getString("district_name"));
+        dis.setId_district(rs.getInt("id_district"))    ;
+        dis.setPoliclinic(poli);
+
         house.setBlock(rs.getString("block"));
         house.setHouse_number(rs.getInt("house_number"));
-        house.setId_district(rs.getInt("id_district"));
-        house.setId_street(rs.getInt("id_street"));
+        house.setDistrict(dis);
+        house.setStreet(street);
         house.setId_house(rs.getInt("id_house"));
+        
         return house;
     }
 
-    protected Patient makePatient(ResultSet rs, House house) throws SQLException {
+    protected Patient makePatient(ResultSet rs, House house, District dis, Street street, Policlinic poli) throws SQLException {
         Patient patient = new Patient();
+          poli.setId_policlinic(rs.getInt("id_policlinic"));
+        poli.setName(rs.getString("pname"));
+        
+        street.setId_street(rs.getInt("id_street"));
+        street.setName(rs.getString("sname")); 
+          
+
+        dis.setDistrict_name(rs.getString("district_name"));
+        dis.setId_district(rs.getInt("id_district"))    ;
+        dis.setPoliclinic(poli);
+
+        house.setBlock(rs.getString("block"));
+        house.setHouse_number(rs.getInt("house_number"));
+        house.setDistrict(dis);
+        house.setStreet(street);
+        house.setId_house(rs.getInt("id_house"));
+
         patient.setBirthday(rs.getDate("birthday"));
         patient.setHouse(house);
         patient.setId_patient(rs.getInt("id_patient"));
@@ -78,16 +109,23 @@ public abstract class Abstract {
         return patient;
     }
 
-    protected Doctor makeDoctor(ResultSet rs, Policlinic policlinic, Worktime worktime) throws SQLException {
+    protected Doctor makeDoctor(ResultSet rs, Policlinic policlinic) throws SQLException {
         Doctor doctor = new Doctor();
+
+        policlinic.setId_policlinic(rs.getInt("id_policlinic"));
+        policlinic.setName(rs.getString("pname"));
+
+      
+
         doctor.setId_doctor(rs.getInt("id_doctor"));
+        doctor.setDbirthday(rs.getDate("dbirthday"));
         doctor.setName(rs.getString("name"));
         doctor.setSurname(rs.getString("surname"));
         doctor.setPatronymic(rs.getString("patronymic"));
         doctor.setProfile(rs.getString("profile"));
         doctor.setCabinet(rs.getInt("cabinet"));
         doctor.setPoliclinic(policlinic);
-        doctor.setWorktime(worktime);
+        
         return doctor;
     }
 }

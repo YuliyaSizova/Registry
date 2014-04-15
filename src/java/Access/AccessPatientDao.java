@@ -3,7 +3,10 @@ package Access;
 import Connection.Abstract;
 import Objects.Patient;
 import Dao.PatientDao;
+import Objects.District;
 import Objects.House;
+import Objects.Policlinic;
+import Objects.Street;
 import Objects.Visit_grid;
 import filters.PatientFilter;
 import java.sql.Connection;
@@ -25,7 +28,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
             st.setString(2, patient.getSurname());
             st.setString(3, patient.getName());
             st.setString(4, patient.getPatronymic());
-            st.setDate(5, new java.sql.Date(patient.getBirthday().getTime())); 
+            st.setDate(5, new java.sql.Date(patient.getBirthday().getTime()));
             st.setInt(6, patient.getId_house());
             st.executeUpdate();
         } catch (SQLException ex) {
@@ -48,26 +51,27 @@ public class AccessPatientDao extends Abstract implements PatientDao {
     public List<Patient> getByDoctorId_Patient(int doctorID) {
         System.out.println("0");
         try (Connection con = getConn()) {
-            System.out.println("1");
+
             List<Patient> patients = new ArrayList<Patient>();
             Statement st = con.createStatement();
-            System.out.println("2");
-            ResultSet rs = st.executeQuery("select p.surname,p.name,p.patronymic, p.birthday, p.id_patient from Patient p , House h, Doctor d, District dis, Docs_with_districts dd where p.id_house=h.id_house and dis.id_district=h.id_district and d.id_doctor=dd.id_doctor and dd.id_district=dis.id_district and d.id_doctor = " + doctorID + "");
+
+            ResultSet rs = st.executeQuery("select p.surname,p.name,p.patronymic, p.birthday, p.id_patient, p.policy from Patient p , House h, Doctor d, District dis, Docs_with_districts dd where p.id_house=h.id_house and dis.id_district=h.id_district and d.id_doctor=dd.id_doctor and dd.id_district=dis.id_district and d.id_doctor = " + doctorID + "");
 
             System.out.println("2");
 
             while (rs.next()) {
 
-                Patient patientList = new Patient();
-                patientList.setSurname(rs.getString("surname"));
-                patientList.setName(rs.getString("name"));
-                patientList.setPatronymic(rs.getString("patronymic"));
-                patientList.setBirthday(rs.getDate("birthday"));
-                patientList.setId_patient(rs.getInt("id_patient"));
-                patients.add(patientList);
+                Patient patient = new Patient();
+                patient.setBirthday(rs.getDate("birthday"));
+//                patient.setHouse(house);
+                patient.setId_patient(rs.getInt("id_patient"));
+                patient.setName(rs.getString("name"));
+                patient.setPatronymic(rs.getString("patronymic"));
+                patient.setPolicy(rs.getInt("policy"));
+                patient.setSurname(rs.getString("surname"));
+                patients.add(patient);
             }
-            rs.close();
-            con.close();
+
             return patients;
 
         } catch (SQLException ex) {
@@ -88,7 +92,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
             while (rs.next()) { // Заполняются только ID????
                 patient.setId_patient(rs.getInt("id_patient"));
             }
-            con.close();
+
             return patient;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -99,17 +103,22 @@ public class AccessPatientDao extends Abstract implements PatientDao {
     @Override
     public Patient getByID(int id) {
         try (Connection con = getConn()) {
-            final String SELECT = "SELECT p.*, h.id_street, h.id_district, h.house_number, h.block"
-                    + " FROM Patient p"
-                    + " INNER JOIN House h on p.id_house=h.id_house"
+            final String SELECT = "SELECT p.surname, p.name, p.patronymic, p.birthday, p.id_patient, p.policy, s.id_street, s.name AS sname, dis.id_district, dis.district_name, poli.id_policlinic, poli.name AS pname, h.id_house, h.house_number, h.block FROM (((Patient  p inner join House  h on p.id_house=h.id_house) "
+                    + "inner join  District  dis on dis.id_district = h.id_district)"
+                    + "inner join  Policlinic  poli on poli.id_policlinic=dis.id_policlinic) "
+                    + "inner join  Street  s on s.id_street=h.id_street "
                     + " WHERE p.id_patient = ?";
             PreparedStatement st = con.prepareStatement(SELECT);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             rs.next(); // Переход к первой строке результата запроса
-                       // Цикл не нужен, т.к. пациент только один
-            House house = makeHouse(rs);
-            Patient patient = makePatient(rs, house);
+            // Цикл не нужен, т.к. пациент только один
+            District dis = new District();
+            Street str = new Street();
+            Policlinic poli = new Policlinic();
+            House house = new House();
+            Patient patient = makePatient(rs, house, dis, str, poli);
+
             return patient;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -120,18 +129,17 @@ public class AccessPatientDao extends Abstract implements PatientDao {
     // Это копия твоего метода getByDoctorId_Patient с небольшими изменениямиы. лучше потом изменить их.
     @Override
     public List<Patient> filterPatientsForDoctorByFIO(int doctorID, PatientFilter filter) {
-        System.out.println("0");
         try (Connection con = getConn()) {
-            System.out.println("1");
             List<Patient> patients = new ArrayList<Patient>();
-            Statement st = con.createStatement();
-            System.out.println("2");
-            ResultSet rs = st.executeQuery("select p.surname,p.name,p.patronymic, p.birthday, p.id_patient from Patient p , House h, Doctor d, District dis, Docs_with_districts dd where p.id_house=h.id_house and dis.id_district=h.id_district and d.id_doctor=dd.id_doctor and dd.id_district=dis.id_district and d.id_doctor = " + doctorID + ""
-                    + " AND p.name LIKE '%" + filter.getName() + "%'"
-                    + " AND p.surname LIKE '%" + filter.getSurname() + "%'"
-                    + " AND p.patronymic LIKE '%" + filter.getPatronymic()+ "%'");
 
-            System.out.println("2");
+            PreparedStatement st = con.prepareStatement("select p.surname,p.name,p.patronymic, p.birthday, p.id_patient, p.policy from Patient p , House h, Doctor d, District dis, Docs_with_districts dd where p.id_house=h.id_house and dis.id_district=h.id_district and d.id_doctor=dd.id_doctor and dd.id_district=dis.id_district and d.id_doctor =?"
+                    + " AND p.name LIKE '%" + filter.getName().toLowerCase() + "%'"
+                    + " AND p.surname LIKE '%" + filter.getSurname().toLowerCase() + "%'"
+                    + " AND p.patronymic LIKE '%" + filter.getPatronymic().toLowerCase() + "%'"
+                    + " AND p.policy LIKE '%" + filter.getPolicy().toLowerCase() + "%'"
+            );
+            st.setInt(1, doctorID);
+            ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
 
@@ -141,14 +149,13 @@ public class AccessPatientDao extends Abstract implements PatientDao {
                 patientList.setPatronymic(rs.getString("patronymic"));
                 patientList.setBirthday(rs.getDate("birthday"));
                 patientList.setId_patient(rs.getInt("id_patient"));
+                patientList.setPolicy(rs.getInt("policy"));
                 patients.add(patientList);
             }
-            rs.close();
-            con.close();
+            
             return patients;
 
         } catch (SQLException ex) {
-            System.out.println("ohh");
             ex.printStackTrace();
             return null;
         }

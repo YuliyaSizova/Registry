@@ -6,17 +6,13 @@
 
 package Dao;
 
-import Objects.Doctor;
+import Objects.Worktime;
 import java.util.List;
 
 /**
  *
  * @author ASUS
  */
-public interface DoctorDao {
-   void addDoctor (Doctor doctor);
-   void updateDoctor (Doctor doctor);
-   void deleteDoctor (int id_doctor);
-   Doctor getById_Doctor(int id_doctor);
-   
+public interface WorktimeDao{
+   List<Worktime> getWorktime(int id_doctor);
 }

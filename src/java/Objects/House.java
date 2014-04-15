@@ -12,8 +12,8 @@ package Objects;
  */
 public class House {
     private int id_house;
-    private int id_street;
-    private int id_district;
+    private Street street;
+    private District district;
     private int house_number;
     private String block = "";
 
@@ -31,33 +31,11 @@ public class House {
         this.id_house = id_house;
     }
 
-    /**
-     * @return the id_street
-     */
-    public int getId_street() {
-        return id_street;
-    }
-
-    /**
-     * @param id_street the id_street to set
-     */
-    public void setId_street(int id_street) {
-        this.id_street = id_street;
-    }
 
     /**
      * @return the id_district
      */
-    public int getId_district() {
-        return id_district;
-    }
 
-    /**
-     * @param id_district the id_district to set
-     */
-    public void setId_district(int id_district) {
-        this.id_district = id_district;
-    }
 
     /**
      * @return the house_number
@@ -89,5 +67,33 @@ public class House {
         } else {
             this.block = block;
         }
+    }
+
+    /**
+     * @return the street
+     */
+    public Street getStreet() {
+        return street;
+    }
+
+    /**
+     * @param street the street to set
+     */
+    public void setStreet(Street street) {
+        this.street = street;
+    }
+
+    /**
+     * @return the district
+     */
+    public District getDistrict() {
+        return district;
+    }
+
+    /**
+     * @param district the district to set
+     */
+    public void setDistrict(District district) {
+        this.district = district;
     }
 }

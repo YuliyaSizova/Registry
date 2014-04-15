@@ -5,8 +5,13 @@
 package servlets;
 
 import Access.AccessTableFactory;
+import Dao.DoctorDao;
 import Dao.PatientDao;
+import Dao.WorktimeDao;
+import Objects.Doctor;
+import Objects.LoginParol;
 import Objects.Patient;
+import Objects.Worktime;
 import fabric.TableFactory;
 import filters.PatientFilter;
 import java.io.IOException;
@@ -16,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -23,18 +29,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DoctorServlet", loadOnStartup = 1, urlPatterns = {
     "/ShowPatientList/",
-    "/ShowFilteredPatientList/"
+    "/ShowFilteredPatientList/",
+    "/ShowProfile/"
 })
 public class DoctorServlet extends HttpServlet {
 
     private TableFactory factory = new AccessTableFactory();
     private PatientDao patientDao = factory.makePatient();
+    private DoctorDao doctorDao = factory.makeDoctor();
+    private WorktimeDao worktimeDao = factory.makeWorktime();
 
     protected void showPatientList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // doctor_id - имя текстового поля (см. index.jsp: <input type="text" name="doctor_id" value="" />)
-        int doctorID = Integer.parseInt(request.getParameter("doctor_id")); // Тут бы хорошо проверку, но можно потом
+        HttpSession session = request.getSession();
+        LoginParol lp = (LoginParol) session.getAttribute("user");
+        int doctorID = lp.getDoctor().getId_doctor();
+        // Тут бы хорошо проверку, но можно потом
         List<Patient> patientList = patientDao.getByDoctorId_Patient(doctorID);
         request.setAttribute("patientList", patientList);
         // Теперь так. Кладём список
@@ -42,19 +54,33 @@ public class DoctorServlet extends HttpServlet {
         // как раньше (у тебя этого нет,
         // можешь посмотреть наши старые версии в МТС)
         // Умные люди пишут, что в сессию класть объекты плохо :)
-
-
         request.getRequestDispatcher("/Doctor/listPatient.jsp").forward(request, response);
+
         // А так происходит переадрессация на нужную страницу.
         // Запрос (в который мы положили список) отправится на неё.
         // Заметь, адрес в браузере не поменяется.
     }
-    
+
+    private void showDoctorProfile(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        LoginParol lp = (LoginParol) session.getAttribute("user");
+        int doctorID = lp.getDoctor().getId_doctor();
+        Doctor doctor = doctorDao.getById_Doctor(doctorID);
+        List<Worktime> worktime = worktimeDao.getWorktime(doctorID);
+
+        request.setAttribute("profile", doctor);
+        request.setAttribute("worktime", worktime);
+        
+        request.getRequestDispatcher("/Doctor/profile.jsp").forward(request, response);
+    }
+
     protected void showFilteredPatientList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        LoginParol lp = (LoginParol) session.getAttribute("user");
 
-
-        int doctorID = Integer.parseInt(request.getParameter("doctor_id")); // Тут бы хорошо проверку, но можно потом
+        int doctorID = lp.getDoctor().getId_doctor();
         PatientFilter filter = new PatientFilter();
         // Пока пусть будет так, остальное (фильтрация без учёта регистра, 
         // значения фильтрации в текстовых полях) смотри в нашем проекте.
@@ -66,15 +92,16 @@ public class DoctorServlet extends HttpServlet {
         filter.setName(request.getParameter("name"));
         filter.setSurname(request.getParameter("surname"));
         filter.setPatronymic(request.getParameter("patronymic"));
+        filter.setPolicy(request.getParameter("policy"));
         List<Patient> patientList = patientDao.filterPatientsForDoctorByFIO(doctorID, filter);
         request.setAttribute("patientList", patientList);
         request.getRequestDispatcher("/Doctor/listPatient.jsp").forward(request, response);
+
     }
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -94,13 +121,16 @@ public class DoctorServlet extends HttpServlet {
                 showFilteredPatientList(request, response);
                 break;
             }
+            case "/ShowProfile/": {
+                showDoctorProfile(request, response);
+                break;
+            }
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -114,8 +144,7 @@ public class DoctorServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -137,4 +166,5 @@ public class DoctorServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

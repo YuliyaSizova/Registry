@@ -13,6 +13,7 @@ import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
 import Dao.Visit_gridDao;
+import Dao.WorktimeDao;
 
 /**
  *
@@ -35,4 +36,6 @@ public abstract class TableFactory {
     public abstract HouseDao makeHouse();
 
     public abstract LoginParolDao makeLoginParol();
+
+    public abstract WorktimeDao makeWorktime();
 }

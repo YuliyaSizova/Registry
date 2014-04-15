@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,7 +85,7 @@ public class LoginUser extends HttpServlet {
         }
 
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -106,9 +107,11 @@ public class LoginUser extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", lp);
             if (doctor.equals(lp.getLevel())) {
-
-                //Creates session with username and direct to next page.
-                response.sendRedirect("/Registry/Doctor/searchPatient.jsp");
+                Cookie cookie = new Cookie("password", lp.getParol());
+                cookie.setMaxAge(3600); // Set the maximum age to be an hour.
+                response.addCookie(cookie); 
+                System.out.println(cookie.getComment());
+                response.sendRedirect("/Registry/ShowPatientList/");
 
             } else {
                 out.println("<h3>Incorrect login information.</h3>");
@@ -123,6 +126,5 @@ public class LoginUser extends HttpServlet {
         session.setAttribute("user", null);
         response.sendRedirect("/Registry/");
     }
-    
-    
+
 }
