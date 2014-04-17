@@ -6,7 +6,7 @@
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@page import="HtmlBuild.HtmlBuilder"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,9 +14,20 @@
         <title>Войти</title>
     </head>
     <body>
-        <%@ include file="header.jsp" %>
+         <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER %>" />
+       
         <p align="right"> <a href="loging.jsp">Зарегистрировать пациента</a></p>
-         <form name="loging" action="LoginUser/" method="POST">
+         <jsp:useBean id="addAnswer" scope="session" class="Objects.AnswerBean" />
+        <%
+            String answer = addAnswer.getMessage();
+            // Мы пытаемся считать сообщение о том, была или не была
+            // добавлена запись. Если сообщение равно null, то ничего не пишем.
+            if (answer != null) {
+                %><font color = "Red"><%out.println(answer);%></font><%
+                addAnswer.setMessage(null);
+            }
+        %> 
+        <form name="loging" action="LoginUser/" method="POST">
             Введите логин :<br>
             <input type="text" name="username" value="" />
             <br>

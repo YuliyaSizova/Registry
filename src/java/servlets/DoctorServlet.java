@@ -9,9 +9,10 @@ import Dao.DoctorDao;
 import Dao.PatientDao;
 import Dao.WorktimeDao;
 import Objects.Doctor;
-import Objects.LoginParol;
+import Objects.User;
 import Objects.Patient;
 import Objects.Worktime;
+import fabric.DaoMaster;
 import fabric.TableFactory;
 import filters.PatientFilter;
 import java.io.IOException;
@@ -34,18 +35,18 @@ import javax.servlet.http.HttpSession;
 })
 public class DoctorServlet extends HttpServlet {
 
-    private TableFactory factory = new AccessTableFactory();
-    private PatientDao patientDao = factory.makePatient();
-    private DoctorDao doctorDao = factory.makeDoctor();
-    private WorktimeDao worktimeDao = factory.makeWorktime();
+    
+    private PatientDao patientDao = DaoMaster.getPatientDao();
+    private DoctorDao doctorDao = DaoMaster.getDoctorDao();
+    private WorktimeDao worktimeDao = DaoMaster.getWorktimeDao();
 
     protected void showPatientList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // doctor_id - имя текстового поля (см. index.jsp: <input type="text" name="doctor_id" value="" />)
         HttpSession session = request.getSession();
-        LoginParol lp = (LoginParol) session.getAttribute("user");
-        int doctorID = lp.getDoctor().getId_doctor();
+        User user=(User) session.getAttribute("user");
+        int doctorID = user.getDoctor().getId_doctor();
         // Тут бы хорошо проверку, но можно потом
         List<Patient> patientList = patientDao.getByDoctorId_Patient(doctorID);
         request.setAttribute("patientList", patientList);
@@ -64,8 +65,8 @@ public class DoctorServlet extends HttpServlet {
     private void showDoctorProfile(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        LoginParol lp = (LoginParol) session.getAttribute("user");
-        int doctorID = lp.getDoctor().getId_doctor();
+        User user=(User) session.getAttribute("user");
+        int doctorID = user.getDoctor().getId_doctor();
         Doctor doctor = doctorDao.getById_Doctor(doctorID);
         List<Worktime> worktime = worktimeDao.getWorktime(doctorID);
 
@@ -78,9 +79,9 @@ public class DoctorServlet extends HttpServlet {
     protected void showFilteredPatientList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        LoginParol lp = (LoginParol) session.getAttribute("user");
-
-        int doctorID = lp.getDoctor().getId_doctor();
+        User user=(User) session.getAttribute("user");
+        
+        int doctorID = user.getDoctor().getId_doctor();
         PatientFilter filter = new PatientFilter();
         // Пока пусть будет так, остальное (фильтрация без учёта регистра, 
         // значения фильтрации в текстовых полях) смотри в нашем проекте.

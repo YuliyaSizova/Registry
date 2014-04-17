@@ -6,16 +6,16 @@
 --%>
 
 <%@page import="Objects.Doctor"%>
-<%@page import="Objects.LoginParol"%>
+<%@page import="Objects.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    LoginParol loginParol = (LoginParol) session.getAttribute("user");
-    if (loginParol == null || !(loginParol.getLevel().equals("doctor"))) {
-        out.print("You shall not pass!");
-        out.print("<a href=\"" + request.getContextPath() + "\">обратно</a>");
-        return;
-    }
+    User loginParol = (User) session.getAttribute("user");
+   // if (loginParol == null || !(loginParol.getLevel().equals("doctor"))) {
+     //   out.print("You shall not pass!");
+    //    out.print("<a href=\"" + request.getContextPath() + "\">обратно</a>");
+    //    return;
+   // }
     Doctor doctorForHeader = loginParol.getDoctor();
 %>
 <html>

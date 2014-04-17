@@ -8,7 +8,7 @@ package fabric;
 import Dao.DateDao;
 import Dao.DoctorDao;
 import Dao.HouseDao;
-import Dao.LoginParolDao;
+import Dao.UserDao;
 import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
@@ -35,7 +35,7 @@ public abstract class TableFactory {
 
     public abstract HouseDao makeHouse();
 
-    public abstract LoginParolDao makeLoginParol();
+    public abstract UserDao makeUser();
 
     public abstract WorktimeDao makeWorktime();
 }

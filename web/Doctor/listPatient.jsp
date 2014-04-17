@@ -4,6 +4,7 @@
     Author     : ASUS
 --%>
 
+<%@page import="HtmlBuild.HtmlBuilder"%>
 <%@page import="Objects.Patient"%>
 <%@page import="java.util.List"%>
 <%@page import="Access.AccessTableFactory"%>
@@ -17,14 +18,14 @@
         <title>Список пациентов, закрепленных за данных врачом</title>
     </head>
     <body>
-        
-        <%@ include file="headerDoc.jsp" %>
+
+        <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER%>" />
         <%  /*StringBuilder builder = new StringBuilder();
              TableFactory factory = new AccessTableFactory();
              PatientDao patientDao = factory.makePatient();
              List<Patient> patients = patientDao.getByDoctorId_Patient(7);*/
-      
-        
+
+
             Object perhapsListOfPatients = request.getAttribute("patientList");
             // patientList - то имя, которое указали в setAttribute (см. код сервлета)
             if (perhapsListOfPatients == null) {
@@ -37,28 +38,28 @@
         <br> <br>
     <center> <table border=1><tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>№ полиса OMC</th><th>Действия</th></tr>
             <tr>
-                <form name="Filter Form" action="/Registry/ShowFilteredPatientList/" method = "GET">
-                    <td>
-                        <input type="text" name="surname" value="" />
-                    </td>
-                    <td>
-                        <input type="text" name="name" value="" />
-                    </td>
-                    <td>
-                        <input type="text" name="patronymic" value="" />
-                    </td>
-                    <td>
-                        <input type="text" name="policy" value="" />
-                    </td>
-                    <td>
-                        <input type="hidden" name="doctor_id" value="<%= request.getParameter("doctor_id") %>" />
-                        <input type="submit" value="Поиск">
-                    </td>
-                </form>
+            <form name="Filter Form" action="/Registry/ShowFilteredPatientList/" method = "GET">
+                <td>
+                    <input type="text" name="surname" value="" />
+                </td>
+                <td>
+                    <input type="text" name="name" value="" />
+                </td>
+                <td>
+                    <input type="text" name="patronymic" value="" />
+                </td>
+                <td>
+                    <input type="text" name="policy" value="" />
+                </td>
+                <td>
+                    <input type="hidden" name="doctor_id" value="<%= request.getParameter("doctor_id")%>" />
+                    <input type="submit" value="Поиск">
+                </td>
+            </form>
             </tr>
-        <%
-            for (Patient patient : patients) {
-        %>
+            <%
+                for (Patient patient : patients) {
+            %>
             <tr>
                 <td> <%= patient.getSurname()%> </td>
                 <td> <%= patient.getName()%> </td>
@@ -71,9 +72,9 @@
                     </form>
                 </td>
             </tr>
-        <%
-            }
-        %>
+            <%
+                }
+            %>
         </table></center>
-    </body>
+</body>
 </html>

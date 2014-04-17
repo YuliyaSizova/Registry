@@ -8,7 +8,7 @@ package Access;
 import Dao.DateDao;
 import Dao.DoctorDao;
 import Dao.HouseDao;
-import Dao.LoginParolDao;
+import Dao.UserDao;
 import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
@@ -58,8 +58,8 @@ public class AccessTableFactory extends TableFactory {
     }
 
     @Override
-    public LoginParolDao makeLoginParol() {
-        return new AccessLoginParolDao();
+    public UserDao makeUser() {
+        return new AccessUserDao();
     }
 
     @Override

@@ -4,6 +4,7 @@
     Author     : ASUS
 --%>
 
+<%@page import="HtmlBuild.HtmlBuilder"%>
 <%@page import="Objects.Worktime"%>
 <%@page import="Objects.Doctor"%>
 <%@page import="java.util.List"%>
@@ -18,8 +19,8 @@
         <title>Личная страница врача</title>
     </head>
     <body>
-        <%@ include file="headerDoc.jsp" %>
-        <%            Object profile = request.getAttribute("profile");
+        <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER%>" />
+        <%  Object profile = request.getAttribute("profile");
             Object worktime = request.getAttribute("worktime");
 
             if (profile == null) {

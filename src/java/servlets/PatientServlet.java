@@ -7,6 +7,7 @@ package servlets;
 import Access.AccessTableFactory;
 import Dao.PatientDao;
 import Objects.Patient;
+import fabric.DaoMaster;
 import fabric.TableFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "PatientServlet", loadOnStartup = 1, urlPatterns = {"/showPatient/"})
 public class PatientServlet extends HttpServlet {
     
-    private TableFactory factory = new AccessTableFactory();
-    private PatientDao patientDao = factory.makePatient();
+    
+    private PatientDao patientDao = DaoMaster.getPatientDao();
 
     // Всё аналогично методу из DoctorServlet
     protected void showPatient(HttpServletRequest request, HttpServletResponse response)

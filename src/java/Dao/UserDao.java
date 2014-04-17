@@ -6,12 +6,12 @@
 
 package Dao;
 
-import Objects.LoginParol;
+import Objects.User;
 
 /**
  *
  * @author ASUS
  */
-public interface LoginParolDao  {
-    LoginParol SelectUser(String login, String parol);
+public interface UserDao  {
+    User getUser(String login);
 }

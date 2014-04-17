@@ -1,5 +1,6 @@
 
 
+<%@page import="HtmlBuild.HtmlBuilder"%>
 <%@page import="Objects.Patient"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,7 +10,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%@ include file="/Doctor/headerDoc.jsp"%>
+          <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER %>" />
+       
         <%            Object potentialPatient = request.getAttribute("patient");
             if (potentialPatient == null) {
                 out.print(":(");

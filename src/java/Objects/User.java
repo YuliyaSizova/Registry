@@ -5,16 +5,33 @@
  */
 package Objects;
 
+import security.SecurityBean;
+
 /**
  *
  * @author ASUS
  */
-public class LoginParol {
+public class User {
 
     private String login;
     private String parol;
-    private String level;
+    private Role role;
     private Doctor doctor;
+
+    public User() {
+        setId_role(SecurityBean.NOT_LOGGED);
+    }
+
+    public int getId_role() {
+        return role.getId_role();
+    }
+
+    public void setId_role(int id_role) {
+        if (role == null) {
+            role = new Role();
+        }
+        role.setId_role(id_role);
+    }
 
     /**
      * @return the login
@@ -47,18 +64,16 @@ public class LoginParol {
     /**
      * @return the level
      */
-    public String getLevel() {
-        return level;
+    public Role getRole() {
+        return role;
     }
 
     /**
      * @param level the level to set
      */
-    public void setLevel(String level) {
-        this.level = level;
+    public void setRole(Role role) {
+        this.role = role;
     }
-
-
 
     /**
      * @return the doctor
