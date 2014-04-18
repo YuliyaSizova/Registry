@@ -10,6 +10,7 @@
         <title>JSP Page</title>
     </head>
     <body>
+           <jsp:include page="<%= HtmlBuilder.CHECK_ACCEPT%>" flush="true"/>
           <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER %>" />
        
         <%            Object potentialPatient = request.getAttribute("patient");

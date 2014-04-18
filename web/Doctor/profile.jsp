@@ -19,7 +19,9 @@
         <title>Личная страница врача</title>
     </head>
     <body>
+        <jsp:useBean id="user" class="Objects.User" scope="session" />
         <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER%>" />
+        <jsp:include page="<%= HtmlBuilder.CHECK_ACCEPT%>" flush="true"/>
         <%  Object profile = request.getAttribute("profile");
             Object worktime = request.getAttribute("worktime");
 

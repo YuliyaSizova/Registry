@@ -44,6 +44,7 @@ public class SecurityBean {
     public SecurityBean() {
         acceptedRoles = new HashSet<>();
         acceptedRoles.add(ADMIN);
+        acceptedRoles.add(DOCTOR);
     }
     
     /**

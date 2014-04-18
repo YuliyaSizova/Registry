@@ -21,7 +21,7 @@
 <%
     if ( !security.isUserAccepted(user)) {
         out.print("You shall no pass!");
-        out.print("<a href=\"" + request.getHeader("referer")+ "\">обрано</a>");
+        out.print("<a href=\"" + request.getContextPath()+ "\">обратно</a>");
         out.close();
         return;
     }

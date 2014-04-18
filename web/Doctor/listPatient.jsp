@@ -18,8 +18,10 @@
         <title>Список пациентов, закрепленных за данных врачом</title>
     </head>
     <body>
-
+        <jsp:useBean id="user" class="Objects.User" scope="session" />
         <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER%>" />
+        <jsp:include page="<%= HtmlBuilder.CHECK_ACCEPT%>" flush="true"/>
+
         <%  /*StringBuilder builder = new StringBuilder();
              TableFactory factory = new AccessTableFactory();
              PatientDao patientDao = factory.makePatient();

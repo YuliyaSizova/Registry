@@ -125,6 +125,7 @@ public class LoginUser extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         session.setAttribute("user", null);
+        
         response.sendRedirect(request.getContextPath());
     }
 

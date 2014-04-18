@@ -14,7 +14,7 @@ import security.SecurityBean;
 public class User {
 
     private String login;
-    private String parol;
+    private String parol="";
     private Role role;
     private Doctor doctor;
 
