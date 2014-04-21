@@ -4,16 +4,20 @@
     Author     : ASUS
 --%>
 
+<%@page import="HtmlBuild.HtmlBuilder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-       
+       <% String ROOT = request.getContextPath();%>
+        <%= HtmlBuilder.includeCSS(ROOT)%>
     </head>
     <body>
-      <center>  <table ><tr><td> <center><h3>Электронная регистратура</h3></center></td></tr> 
-       </table></center>
-        <hr>
+       
+        <table class="selectH" border=1 ><tr>
+              <th class="selectH" width="25%"><img src="/Registry/pics/logo.gif" alt=":("/><h3>Электронная регистратура</h3></th></tr> 
+       </table>
+       
     </body>
 </html>

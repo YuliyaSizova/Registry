@@ -4,6 +4,9 @@
     Author     : ASUS
 --%>
 
+
+
+
 <%@page import="HtmlBuild.HtmlBuilder"%>
 <%@page import="Objects.Patient"%>
 <%@page import="java.util.List"%>
@@ -13,11 +16,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Список пациентов, закрепленных за данных врачом</title>
+        <% String ROOT = request.getContextPath();%>
+        <%= HtmlBuilder.includeCSS(ROOT)%>
     </head>
     <body>
+       
+        <%--<%= HtmlBuilder.includeCSS(ROOT)%>--%>
+        
         <jsp:useBean id="user" class="Objects.User" scope="session" />
         <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER%>" />
         <jsp:include page="<%= HtmlBuilder.CHECK_ACCEPT%>" flush="true"/>
@@ -38,24 +47,24 @@
 
         %>
         <br> <br>
-    <center> <table border=1><tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>№ полиса OMC</th><th>Действия</th></tr>
+    <center> <table class="select" border=1><tr><th class="select" width="25%">Фамилия</th><th class="select" width="25%">Имя</th><th class="select" width="25%">Отчество</th><th class="select" width="25%">№ полиса OMC</th><th class="select" width="25%">Действия</th></tr>
             <tr>
-            <form name="Filter Form" action="/Registry/ShowFilteredPatientList/" method = "GET">
-                <td>
-                    <input type="text" name="surname" value="" />
+            <form name="Filter Form" action="<%= ROOT %>/ShowFilteredPatientList/" method = "GET">
+                <td class="withform">
+                    <input class="intable" type="text" name="surname" value="" />
                 </td>
-                <td>
-                    <input type="text" name="name" value="" />
+                <td class="withform">
+                    <input class="intable" type="text" name="name" value="" />
                 </td>
-                <td>
-                    <input type="text" name="patronymic" value="" />
+                <td class="withform">
+                    <input class="intable" type="text" name="patronymic" value="" />
                 </td>
-                <td>
-                    <input type="text" name="policy" value="" />
+                <td class="withform">
+                    <input class="intable" type="text" name="policy" value="" />
                 </td>
-                <td>
-                    <input type="hidden" name="doctor_id" value="<%= request.getParameter("doctor_id")%>" />
-                    <input type="submit" value="Поиск">
+                <td class="withform">
+                    <input  type="hidden" name="doctor_id" value="<%= request.getParameter("doctor_id")%>" />
+                    <input  type="submit" value="Поиск">
                 </td>
             </form>
             </tr>
@@ -63,10 +72,10 @@
                 for (Patient patient : patients) {
             %>
             <tr>
-                <td> <%= patient.getSurname()%> </td>
-                <td> <%= patient.getName()%> </td>
-                <td> <%= patient.getPatronymic()%> </td>
-                <td> <%= patient.getPolicy()%> </td>
+                <td class="select"> <%= patient.getSurname()%> </td>
+                <td class="select"> <%= patient.getName()%> </td>
+                <td class="select"> <%= patient.getPatronymic()%> </td>
+                <td class="select"> <%= patient.getPolicy()%> </td>
                 <td> 
                     <form name="Show Patient Form" action="/Registry/showPatient/" method="GET">
                         <input type="hidden" name="patient_id" value="<%= patient.getId_patient()%>" />

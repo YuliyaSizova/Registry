@@ -16,7 +16,7 @@
     <body>
          <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER %>" />
        
-        <p align="right"> <a href="loging.jsp">Зарегистрировать пациента</a></p>
+         <p align="right"> <a class="other" href="loging.jsp">Зарегистрировать пациента</a></p>
          <jsp:useBean id="addAnswer" scope="session" class="Objects.AnswerBean" />
         <%
             String answer = addAnswer.getMessage();
@@ -34,7 +34,7 @@
             Введите пароль :<br>
             <input type="password" name="password" value="" />
             <br>
-            <input type="submit" value="Войти" />
+            <input class="patient" type="submit" value="Войти" />
          </form>
          <%-- <form name="Doctor's Patient List Test" action="/Registry/ShowPatientList/" method="GET">
            -- Введите 7:
