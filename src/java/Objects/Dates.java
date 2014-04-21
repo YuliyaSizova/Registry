@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Dates {
   private int id_date;
-  private Date date;
+  private Date daten;
 
     /**
      * @return the id_date
@@ -33,14 +33,14 @@ public class Dates {
     /**
      * @return the date
      */
-    public Date getDate() {
-        return date;
+    public Date getDaten() {
+        return daten;
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDaten(Date daten) {
+        this.daten = daten;
     }
 }

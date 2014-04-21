@@ -7,7 +7,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Работа с пациентом</title>
     </head>
     <body>
            <jsp:include page="<%= HtmlBuilder.CHECK_ACCEPT%>" flush="true"/>
@@ -21,13 +21,16 @@
             Patient patient = (Patient) potentialPatient;
         %>
 
-        Имя: <%= patient.getName()%> <br>
-        Фамилия: <%= patient.getSurname()%><br>
-        Отчество: <%= patient.getPatronymic()%><br>
-        Дата рождения: <%= patient.getBirthday()%><br>
-        Полис: <%= patient.getPolicy()%><br>
-        Дом: <%= patient.getHouse().getHouse_number() + " " + patient.getHouse().getBlock()%><br>
-        Улица: <%= patient.getHouse().getStreet().getName()%>
-        
+        <b>Имя:</b> <%= patient.getName()%> <br>
+        <b>Фамилия:</b> <%= patient.getSurname()%><br>
+        <b>Отчество:</b> <%= patient.getPatronymic()%><br>
+        <b>Дата рождения:</b> <%= patient.getBirthday()%><br>
+        <b>Полис:</b> <%= patient.getPolicy()%><br>
+        <b>Дом:</b> <%= patient.getHouse().getHouse_number() + " " + patient.getHouse().getBlock()%><br>
+        <b>Улица:</b> <%= patient.getHouse().getStreet().getName()%>
+             <form name="Show Patient Form" action="/Registry/history/" method="GET">
+                        <input type="hidden" name="patient_id" value="<%= patient.getId_patient()%>" />
+                        <input type="submit" value="Посмотреть историю посещения врачей" />
+                    </form>
     </body>
 </html>

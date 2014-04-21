@@ -3,11 +3,16 @@ package Access;
 import Connection.Abstract;
 import Objects.Patient;
 import Dao.PatientDao;
+import Objects.Dates;
 import Objects.District;
+import Objects.Doctor;
 import Objects.House;
+import Objects.Journal;
 import Objects.Policlinic;
 import Objects.Street;
-import Objects.Visit_grid;
+import Objects.Ticket;
+import Objects.Visit_time;
+
 import filters.PatientFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 
+/**
+ *
+ * @author ASUS
+ */
 public class AccessPatientDao extends Abstract implements PatientDao {
 
     @Override
@@ -81,24 +90,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
         }
     }
 
-    @Override
-    public Patient getByPolicy(int policy) {
-
-        try (Connection con = getConn()) {
-            PreparedStatement st = con.prepareStatement("select id_patient from Patient where policy=?");
-            st.setInt(1, policy);
-            ResultSet rs = st.executeQuery();
-            Patient patient = new Patient();
-            while (rs.next()) { // Заполняются только ID????
-                patient.setId_patient(rs.getInt("id_patient"));
-            }
-
-            return patient;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+   
 
     @Override
     public Patient getByID(int id) {
@@ -160,4 +152,52 @@ public class AccessPatientDao extends Abstract implements PatientDao {
             return null;
         }
     }
+
+    @Override
+    public List<Journal> getPatientHistory(int id_patient) {
+       try (Connection con = getConn()) {
+            List<Journal> journal = new ArrayList<Journal>();
+
+            PreparedStatement st = con.prepareStatement("SELECT d.surname, d.name, d.patronymic, d.profile, da.daten, ti.time, j.diagnosis\n" +
+"FROM ((((Journal AS j "
+                    + "INNER JOIN Ticket AS t ON j.id_ticket=t.id_ticket) "
+                    + "INNER JOIN Visit_grid AS vg ON t.id_grid=vg.id_grid) "
+                    + "INNER JOIN Visit_time AS ti ON vg.id_time=ti.id_time) "
+                    + "INNER JOIN Doctor AS d ON d.id_doctor=t.id_doctor) "
+                    + "INNER JOIN Dates AS da ON da.id_date=vg.id_date\n " +
+"WHERE t.id_patient=?"
+            );
+            st.setInt(1,id_patient);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Ticket ticket = new Ticket();
+//                Patient p = makePatient(rs, null, null, null, null);
+                Doctor doc = new Doctor();
+                Visit_time time = new Visit_time();
+                time.setTime(rs.getTime("time"));
+                Dates d= new Dates();
+                d.setDaten(rs.getDate("daten"));
+                doc.setName(rs.getString("name"));
+                doc.setSurname(rs.getString("surname"));
+                doc.setPatronymic(rs.getString("patronymic"));
+                doc.setProfile(rs.getString("profile"));
+                ticket.setDoctor(doc);
+                ticket.setTime(time);
+                ticket.setD(d);                
+                
+                Journal jo = new Journal();
+//              jo.setId_journal(rs.getInt("id_journal"));
+                jo.setDiagnosis(rs.getString("diagnosis"));
+                jo.setTicket(ticket);
+              
+                journal.add(jo);
+            }
+            
+            return journal;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } }
 }

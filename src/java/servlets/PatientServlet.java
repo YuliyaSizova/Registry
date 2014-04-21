@@ -6,11 +6,13 @@ package servlets;
 
 import Access.AccessTableFactory;
 import Dao.PatientDao;
+import Objects.Journal;
 import Objects.Patient;
 import fabric.DaoMaster;
 import fabric.TableFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Ivan
  */
-@WebServlet(name = "PatientServlet", loadOnStartup = 1, urlPatterns = {"/showPatient/"})
+@WebServlet(name = "PatientServlet", loadOnStartup = 1, urlPatterns = {"/showPatient/", 
+    "/history/"})
 public class PatientServlet extends HttpServlet {
     
     
@@ -53,6 +56,10 @@ public class PatientServlet extends HttpServlet {
         switch (userPath) {
             case "/showPatient/": {
                 showPatient(request, response);
+                break;
+            }
+             case "/history/": {
+                historyPatient(request, response);
                 break;
             }
         }
@@ -98,4 +105,13 @@ public class PatientServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void historyPatient(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+       int patientID = Integer.parseInt(request.getParameter("patient_id"));
+        List<Journal> jo = patientDao.getPatientHistory(patientID);
+        request.setAttribute("journal", jo);
+        request.getRequestDispatcher("/Patient/PatientHistory.jsp").forward(request, response);
+   
+    }
 }

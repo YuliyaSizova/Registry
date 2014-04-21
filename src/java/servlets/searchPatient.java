@@ -40,7 +40,7 @@ public class searchPatient extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int policy = Integer.parseInt(request.getParameter("policy"));
-        patientDao.getByPolicy(policy);
+//        patientDao.getByPolicy(policy);
 //        response.sendRedirect(request.getContextPath());
     }
 

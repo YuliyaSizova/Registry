@@ -14,11 +14,12 @@ import java.util.Date;
  */
 public class Sick_list {
     private int id_sick_list;
-    private int id_doctor;
-    private int id_patient;
-    private long date;
+    private Doctor doctor;
+    private Patient patient;
+    private Date date_begin;
+    private Date date_end;
     private String diagnosis;
-    private Date time;
+    
 
     /**
      * @return the id_sick_list
@@ -34,48 +35,7 @@ public class Sick_list {
         this.id_sick_list = id_sick_list;
     }
 
-    /**
-     * @return the id_doctor
-     */
-    public int getId_doctor() {
-        return id_doctor;
-    }
-
-    /**
-     * @param id_doctor the id_doctor to set
-     */
-    public void setId_doctor(int id_doctor) {
-        this.id_doctor = id_doctor;
-    }
-
-    /**
-     * @return the id_patient
-     */
-    public int getId_patient() {
-        return id_patient;
-    }
-
-    /**
-     * @param id_patient the id_patient to set
-     */
-    public void setId_patient(int id_patient) {
-        this.id_patient = id_patient;
-    }
-
-    /**
-     * @return the date
-     */
-    public long getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(long date) {
-        this.date = date;
-    }
-
+    
     /**
      * @return the diagnosis
      */
@@ -91,16 +51,63 @@ public class Sick_list {
     }
 
     /**
-     * @return the time
+     * @return the doctor
      */
-    public Date getTime() {
-        return time;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
     /**
-     * @param time the time to set
+     * @param doctor the doctor to set
      */
-    public void setTime(Date time) {
-        this.time = time;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
+
+    /**
+     * @return the patient
+     */
+    public Patient getPatient() {
+        return patient;
+    }
+
+    /**
+     * @param patient the patient to set
+     */
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    /**
+     * @return the date_begin
+     */
+    public Date getDate_begin() {
+        return date_begin;
+    }
+
+    /**
+     * @param date_begin the date_begin to set
+     */
+    public void setDate_begin(Date date_begin) {
+        this.date_begin = date_begin;
+    }
+
+    /**
+     * @return the date_end
+     */
+    public Date getDate_end() {
+        return date_end;
+    }
+
+    /**
+     * @param date_end the date_end to set
+     */
+    public void setDate_end(Date date_end) {
+        this.date_end = date_end;
+    }
+
+    /**
+     * @return the time
+     */
+ 
 }

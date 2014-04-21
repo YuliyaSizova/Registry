@@ -12,7 +12,7 @@ import Dao.UserDao;
 import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
-import Dao.Visit_gridDao;
+
 import Dao.WorktimeDao;
 
 /**
@@ -27,7 +27,7 @@ public abstract class TableFactory {
 
     public abstract Sick_listDao makeSick_list();
 
-    public abstract Visit_gridDao makeGrid();
+   
 
     public abstract DateDao makeDate();
 

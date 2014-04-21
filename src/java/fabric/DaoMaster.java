@@ -26,6 +26,7 @@ public class DaoMaster {
     private final static PatientDao patientDao = factory.makePatient();
     private final static HouseDao houseDao = factory.makeHouse();
     private final static WorktimeDao worktimeDao = factory.makeWorktime();
+   
 
     public static UserDao getUserDao() {
         return userDao;
@@ -46,4 +47,5 @@ public class DaoMaster {
     public static HouseDao getHouseDao() {
         return houseDao;
     }
+   
 }

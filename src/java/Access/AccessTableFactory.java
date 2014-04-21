@@ -12,7 +12,7 @@ import Dao.UserDao;
 import Dao.PatientDao;
 import Dao.Sick_listDao;
 import Dao.StreetDao;
-import Dao.Visit_gridDao;
+
 import Dao.WorktimeDao;
 import fabric.TableFactory;
 
@@ -37,11 +37,7 @@ public class AccessTableFactory extends TableFactory {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Visit_gridDao makeGrid() {
-        return new AccessVisit_GridDao();
-    }
-
+  
     @Override
     public DateDao makeDate() {
         return new AccessDateDao();
@@ -66,4 +62,6 @@ public class AccessTableFactory extends TableFactory {
     public WorktimeDao makeWorktime() {
         return new AccessWorktimeDao();
     }
+
+    
 }

@@ -12,6 +12,6 @@ import java.util.List;
  *
  * @author ASUS
  */
-public interface Visit_gridDao {
-  void fullfillVisit_grid();
-}
+//public interface Visit_gridDao {
+//  void fullfillVisit_grid();
+//}

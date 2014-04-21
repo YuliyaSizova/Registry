@@ -8,7 +8,7 @@ import Access.*;
 import Dao.DateDao;
 import Dao.PatientDao;
 import Objects.Patient;
-import Dao.Visit_gridDao;
+
 import fabric.TableFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +26,7 @@ public class AddServlet extends HttpServlet {
 
     private TableFactory factory = new AccessTableFactory();
     private PatientDao patientDao = factory.makePatient();
-    private Visit_gridDao visit_gridDao = factory.makeGrid();
+ 
     private DateDao dateDao = factory.makeDate();
 
     /**
