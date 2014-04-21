@@ -110,8 +110,10 @@ public class PatientServlet extends HttpServlet {
             throws ServletException, IOException {
        int patientID = Integer.parseInt(request.getParameter("patient_id"));
         List<Journal> jo = patientDao.getPatientHistory(patientID);
+        Patient patient = patientDao.getByID(patientID);
+        request.setAttribute("patient", patient);
         request.setAttribute("journal", jo);
-        request.getRequestDispatcher("/Patient/PatientHistory.jsp").forward(request, response);
+        request.getRequestDispatcher("/Patient/patientHistory.jsp").forward(request, response);
    
     }
 }
