@@ -41,7 +41,8 @@
         <%= j.getTicket().getDoctor().getPatronymic()%><br>
         <i><%=j.getTicket().getDoctor().getProfile()%></i><br>             
     <%= j.getDiagnosis()%> <br>
-    <b>Выписанные лекарства:</b><%= j.getMed()%>
+    
+    <b>Выписанные лекарства: </b><%= j.getMed()%>
     <br>-----------------------------------------<br>
 
 

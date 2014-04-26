@@ -15,7 +15,7 @@ public class Journal {
    private Ticket ticket;
    private Sick_list sick_list;
    private String diagnosis;
-   private String med=" ";
+   private String med="";
 
     /**
      * @return the id_journal

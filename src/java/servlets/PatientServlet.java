@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.tomcat.jni.Time;
 
 @WebServlet(name = "PatientServlet", loadOnStartup = 1, urlPatterns = {"/showPatient/",
-    "/history/", "/visit/","/currentDay/","/addVisit/"})
+    "/history/", "/visit/","/currentDay/","/addVisit/", "/editJournalForm/", "/updateJournal/"})
 public class PatientServlet extends HttpServlet {
 
     private PatientDao patientDao = DaoMaster.getPatientDao();
@@ -73,6 +73,14 @@ public class PatientServlet extends HttpServlet {
              
              case "/addVisit/": {
                 addVisit(request, response);
+                break;
+            }
+            case "/editJournalForm/": {
+                editJournalForm(request, response);
+                break;
+            }
+            case "/updateJournal/": {
+                updateJournal(request, response);
                 break;
             }
         }
@@ -136,6 +144,8 @@ public class PatientServlet extends HttpServlet {
         int patientID = Integer.parseInt(request.getParameter("patient_id"));
         List<Journal> jo = patientDao.getPatientHistoryForDoc(patientID,doctorID);
         Patient patient = patientDao.getByID(patientID);
+        int id_ticket = patientDao.getTicket(doctorID, patientID);
+        request.setAttribute("id_ticket", id_ticket);
         request.setAttribute("patient", patient);
         request.setAttribute("journal", jo);
         request.getRequestDispatcher("/Patient/patientVisit.jsp").forward(request, response);
@@ -158,7 +168,37 @@ public class PatientServlet extends HttpServlet {
 //                return s.format(v);
 //    }
 
-    private void addVisit(HttpServletRequest request, HttpServletResponse response) {
-//    String med = String..parseInt(request.getParameter("patient_id"));
+   private void addVisit(HttpServletRequest request, HttpServletResponse response) {
+
+        String med = request.getParameter("med");
+        String blank = request.getParameter("blank");
+
+    }
+    private void editJournalForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int Id_journal = Integer.parseInt(request.getParameter("Id_journal"));
+        Journal journal = patientDao.getJournalByID(Id_journal);
+        request.setAttribute("journalToUpdate", journal);
+        int patientID = Integer.parseInt(request.getParameter("id_patient"));
+        Patient patient = patientDao.getByID(patientID);
+        request.setAttribute("patient", patient);
+        request.getRequestDispatcher("/Patient/updateJournal.jsp").forward(request, response);
+    }
+
+    private void updateJournal(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        String diagnosis = request.getParameter("diagnosis");
+        String med = request.getParameter("med");
+        int idJournal = Integer.parseInt(request.getParameter("Id_journal"));
+        Journal journal = new Journal();
+        journal.setDiagnosis(diagnosis);
+        journal.setMed(med);
+        journal.setId_journal(idJournal);
+        patientDao.updateJournal(journal);
+        response.sendRedirect(request.getContextPath() + "/visit/?patient_id=" + request.getParameter("id_patient"));
     }
 }
+
+
+ 
+

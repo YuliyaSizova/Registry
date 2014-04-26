@@ -27,21 +27,27 @@
             List<Journal> jo = (List<Journal>) J;
             Object p = request.getAttribute("patient");
             Patient pa = (Patient) p;
+            Object t = request.getAttribute("id_ticket");
+            int id_ticket = (Integer) t;
 
         %>
 
 
         <a class="other" href="http://localhost:8084/Registry/showPatient/?patient_id=<%=pa.getId_patient()%>">Вернуться на страницу пациента</a><br><br>
-        <form  name="visit" action="addVisit/" method="POST">
-             <a href="/Registry/Patient/sickList.jsp"> Больничный </a> <br>
-             Добавте запись в электронную карту пациента: <br> 
-           <textarea  name="blank" rows="4" cols="70">
+        <%if(id_ticket!=0) {%>
+        <form  name="visit" action="addVisit/" >
+            <a href="/Registry/Patient/sickList.jsp"> Больничный </a> <br>
+            Добавте запись в электронную карту пациента: <br> 
+            № талона:   <%=id_ticket%><br>
+            <textarea  name="blank"  cols="70">
             </textarea><br>
-           Лекарства:         <input type="text" name="med" value="" size="80" /><br>
-            <input type="submit" value="Добавить результат приема" name="add" />
-              </form>
+            Лекарства:         <input type="text" name="med" value="" size="80" /><br>
+            
+            <input type="submit" value="Добавить запись" class="selectH" />
+        </form>
+       <%} else out.print("Для приема пациент должен взять талон!");%>
         <br>
-        <% String hr ="-----------------------------------------";%>
+        <% String hr = "-----------------------------------------";%>
         <b>Предыдущие посещения:</b><br><%=hr%><br>
         <%
             for (Journal j : jo) {
@@ -51,7 +57,13 @@
         <b>Врач: </b><%= j.getTicket().getDoctor().getSurname()%> <%= j.getTicket().getDoctor().getName()%>
         <%= j.getTicket().getDoctor().getPatronymic()%><br>
         <i><%=j.getTicket().getDoctor().getProfile()%></i><br>             
-        <%= j.getDiagnosis()%> <br><%=hr%><br>
+        <%= j.getDiagnosis()%><br>
+        <b>Выписанные лекарства: </b><%= j.getMed()%>
+        <form name="Journal Edit Form" action="/Registry/editJournalForm/">
+            <input type="hidden" name="Id_journal" value="<%= j.getId_journal()%>" />
+            <input type="hidden" name="id_patient" value="<%=pa.getId_patient()%>" /> <%-- Чтобы потом перенаправить сюда --%>
+            <input type="submit" value="Редактировать" class="selectH" />
+        </form><%=hr%><br>
 
 
         <%
