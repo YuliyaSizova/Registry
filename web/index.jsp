@@ -36,11 +36,6 @@
             <br>
             <input class="patient" type="submit" value="Войти" />
          </form>
-         <%-- <form name="Doctor's Patient List Test" action="/Registry/ShowPatientList/" method="GET">
-           -- Введите 7:
-        --    <input type="text" name="doctor_id" value="7" />
-        --    <br>
-         --   <input type="submit" value="Список пациентов доктора с данным id" />
-      --  </form> --%>
+ 
     </body>
 </html>

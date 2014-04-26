@@ -1,3 +1,5 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,5 +20,6 @@ public interface DoctorDao {
    void updateDoctor (Doctor doctor);
    void deleteDoctor (int id_doctor);
    Doctor getById_Doctor(int id_doctor);
+   
    
 }

@@ -33,7 +33,7 @@
                         <input type="hidden" name="patient_id" value="<%= patient.getId_patient()%>" />
                         <input type="submit" value="Посмотреть историю посещения врачей" />
             </form></th><th>
-                        <form name="Show Patient Form" action="/Registry/Patient/patientVisit.jsp" method="GET">
+                        <form name="Show Patient Form" action="/Registry/visit/" method="GET">
                         <input type="hidden" name="patient_id" value="<%= patient.getId_patient()%>" />
                         <input type="submit" value="Новый прием" />
                         </form></th></table></center>

@@ -20,8 +20,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.sql.DataSource;
+
 
 /**
  *
@@ -58,7 +59,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
     //. Model-View-Controller (MVC)
     @Override
     public List<Patient> getByDoctorId_Patient(int doctorID) {
-        System.out.println("0");
+        
         try (Connection con = getConn()) {
 
             List<Patient> patients = new ArrayList<Patient>();
@@ -172,7 +173,6 @@ public class AccessPatientDao extends Abstract implements PatientDao {
 
             while (rs.next()) {
                 Ticket ticket = new Ticket();
-//                Patient p = makePatient(rs, null, null, null, null);
                 Doctor doc = new Doctor();
                 Visit_time time = new Visit_time();
                 time.setTime(rs.getTime("time"));
@@ -187,7 +187,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
                 ticket.setD(d);                
                 
                 Journal jo = new Journal();
-//              jo.setId_journal(rs.getInt("id_journal"));
+
                 jo.setDiagnosis(rs.getString("diagnosis"));
                 jo.setTicket(ticket);
               
@@ -200,4 +200,100 @@ public class AccessPatientDao extends Abstract implements PatientDao {
             ex.printStackTrace();
             return null;
         } }
+
+    @Override
+    public List<Journal> getPatientHistoryForDoc(int id_patient, int id_doctor) {
+       try (Connection con = getConn()) {
+            List<Journal> journal = new ArrayList<Journal>();
+
+            PreparedStatement st = con.prepareStatement("SELECT d.surname, d.name, d.patronymic, d.profile, da.daten, ti.time, j.diagnosis, j.med\n " +
+"FROM ((((Journal AS j "
+                    + "INNER JOIN Ticket AS t ON j.id_ticket=t.id_ticket) "
+                    + "INNER JOIN Visit_grid AS vg ON t.id_grid=vg.id_grid) "
+                    + "INNER JOIN Visit_time AS ti ON vg.id_time=ti.id_time) "
+                    + "INNER JOIN Doctor AS d ON d.id_doctor=t.id_doctor) "
+                    + "INNER JOIN Dates AS da ON da.id_date=vg.id_date\n " +
+"WHERE t.id_patient=? and d.id_doctor=?  order by da.id_date desc"
+            );
+            st.setInt(1,id_patient);
+            st.setInt(2,id_doctor);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Ticket ticket = new Ticket();
+                Doctor doc = new Doctor();
+                Visit_time time = new Visit_time();
+                time.setTime(rs.getTime("time"));
+                Dates d= new Dates();
+                d.setDaten(rs.getDate("daten"));
+                doc.setName(rs.getString("name"));
+                doc.setSurname(rs.getString("surname"));
+                doc.setPatronymic(rs.getString("patronymic"));
+                doc.setProfile(rs.getString("profile"));
+                ticket.setDoctor(doc);
+                ticket.setTime(time);
+                ticket.setD(d);                
+                
+                Journal jo = new Journal();
+                jo.setMed(rs.getString("med"));
+                jo.setDiagnosis(rs.getString("diagnosis"));
+                jo.setTicket(ticket);
+                System.out.println(ticket.getPrimary_diagnosis());
+                journal.add(jo);
+            }
+            
+            return journal;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Patient> getByDoctorIdDate_Patient(int doctorID, Date date) {
+         try (Connection con = getConn()) {
+
+            List<Patient> patients = new ArrayList<Patient>();
+          
+
+            PreparedStatement st = con.prepareStatement("SELECT p.surname, p.name,"
+                    + " p.patronymic, p.birthday, p.id_patient, p.policy\n " +
+"FROM Visit_time AS vt, Ticket AS t, Visit_grid AS vi, Dates AS da, Patient AS p, House AS h, "
+                    + "Doctor AS d, District AS dis, Docs_with_districts AS dd\n " +
+"WHERE  vt.id_time = vi.id_time and p.id_house=h.id_house and dis.id_district=h.id_district and "
+                    + "d.id_doctor=dd.id_doctor and dd.id_district=dis.id_district"
+                    + " and d.id_doctor = ? and t.id_patient = p.id_patient and "
+                    + "vi.id_grid=t.id_grid and da.id_date = vi.id_date and "
+                    + "da.daten= ? and (" +
+"(select distinct   j.id_ticket from  Ticket AS t, Visit_grid AS vi, Dates AS da, Patient AS p, Journal AS j, House AS h, Doctor AS d, District AS dis, Docs_with_districts AS dd \n" +
+"where p.id_house=h.id_house And dis.id_district=h.id_district And d.id_doctor=dd.id_doctor And dd.id_district=dis.id_district And d.id_doctor= ? And t.id_patient=p.id_patient And vi.id_grid=t.id_grid And da.id_date=vi.id_date And da.daten=? and j.id_ticket=t.id_ticket )<>t.id_ticket)  And t.id_doctor =? order by vt.id_time");
+
+            st.setInt(1,doctorID);
+            st.setDate(2,  new java.sql.Date(date.getTime()));
+            st.setInt(3,doctorID);
+            st.setDate(4,  new java.sql.Date(date.getTime()));
+            st.setInt(5,doctorID);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                Patient patient = new Patient();
+                patient.setBirthday(rs.getDate("birthday"));
+//                patient.setHouse(house);
+                patient.setId_patient(rs.getInt("id_patient"));
+                patient.setName(rs.getString("name"));
+                patient.setPatronymic(rs.getString("patronymic"));
+                patient.setPolicy(rs.getInt("policy"));
+                patient.setSurname(rs.getString("surname"));
+                patients.add(patient);
+            }
+
+            return patients;
+
+        } catch (SQLException ex) {
+           
+            ex.printStackTrace();
+            return null;
+        }   }
 }

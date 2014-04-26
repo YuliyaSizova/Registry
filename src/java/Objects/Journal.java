@@ -15,7 +15,7 @@ public class Journal {
    private Ticket ticket;
    private Sick_list sick_list;
    private String diagnosis;
-   private Medicament med;
+   private String med=" ";
 
     /**
      * @return the id_journal
@@ -76,14 +76,14 @@ public class Journal {
     /**
      * @return the med
      */
-    public Medicament getMed() {
+    public String getMed() {
         return med;
     }
 
     /**
      * @param med the med to set
      */
-    public void setMed(Medicament med) {
+    public void setMed(String med) {
         this.med = med;
     }
 }

@@ -24,7 +24,7 @@
         <a class="headerlink" href="/Registry/LogoutUser/">Выйти</a>
     </p>
     <table ><tr>
-            <td><center><a class="headerlink" href="/Registry/ShowPatientList/"   >Список пациентов</a></center></td><td><center><a class="headerlink" href="/Registry/ShowProfile/">Личная страница врача</a></center></td>
+            <td><center><a class="headerlink" href="/Registry/ShowPatientList/">Список пациентов</a></center></td><td><center><a class="headerlink" href="/Registry/ShowProfile/">Личная страница врача</a></center></td>
     </table>
 </center>
 

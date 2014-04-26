@@ -4,7 +4,7 @@
  */
 package servlets;
 
-import Access.AccessTableFactory;
+
 import Dao.DoctorDao;
 import Dao.PatientDao;
 import Dao.WorktimeDao;
@@ -13,7 +13,7 @@ import Objects.User;
 import Objects.Patient;
 import Objects.Worktime;
 import fabric.DaoMaster;
-import fabric.TableFactory;
+
 import filters.PatientFilter;
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +43,7 @@ public class DoctorServlet extends HttpServlet {
     protected void showPatientList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // doctor_id - имя текстового поля (см. index.jsp: <input type="text" name="doctor_id" value="" />)
+        
         HttpSession session = request.getSession();
         User user=(User) session.getAttribute("user");
         int doctorID = user.getDoctor().getId_doctor();
@@ -83,13 +83,6 @@ public class DoctorServlet extends HttpServlet {
         
         int doctorID = user.getDoctor().getId_doctor();
         PatientFilter filter = new PatientFilter();
-        // Пока пусть будет так, остальное (фильтрация без учёта регистра, 
-        // значения фильтрации в текстовых полях) смотри в нашем проекте.
-        // Ну или потом вместе сделаем.
-        // Фильрация без учёта регистра:
-        // https://github.com/OlgaChichaeva/MTS/commit/634c416b5b7721a231fd0ed5ff89f9e9d6e27643
-        // значения фильтрации в текстовых полях:
-        // https://github.com/OlgaChichaeva/MTS/commit/e8f18482e82b90579917679efdbb2df4ccbce5f6
         filter.setName(request.getParameter("name"));
         filter.setSurname(request.getParameter("surname"));
         filter.setPatronymic(request.getParameter("patronymic"));

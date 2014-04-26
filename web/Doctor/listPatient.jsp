@@ -46,7 +46,7 @@
             List<Patient> patients = (List<Patient>) perhapsListOfPatients;
 
         %>
-        <br> <br>
+    <br> <br><center> <a class="other" href="/Registry/currentDay/"> Пациенты, взявшие талон на сегодня</a></center><br><br>
     <center> <table class="select" border=1><tr><th class="select" width="25%">Фамилия</th><th class="select" width="25%">Имя</th><th class="select" width="25%">Отчество</th><th class="select" width="25%">№ полиса OMC</th><th class="select" width="25%">Действия</th></tr>
             <tr>
             <form name="Filter Form" action="<%= ROOT %>/ShowFilteredPatientList/" method = "GET">

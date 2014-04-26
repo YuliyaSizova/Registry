@@ -41,7 +41,7 @@ public abstract class Abstract {
         } catch (IOException ex) {
             Logger.getLogger(Abstract.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String path = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\Регистратура\\Регистратура.mdb";
+        String path = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\Registry\\Регистратура.mdb";
         System.out.println(path);
         db = "JDBC:ODBC:Driver=Microsoft Access Driver (*.mdb); DBQ=" + path;
         conI.put("charSet", "Cp1251");
