@@ -20,6 +20,7 @@ public interface PatientDao {
    Patient getByID(int id);
    List<Patient> filterPatientsForDoctorByFIO(int doctorID, PatientFilter filter);
    void updateJournal(Journal journal);
-   int getTicket (int doctor_id, int patient_id);
+   void addJournal (Journal jo);
+   Ticket getTicket (int doctor_id, int patient_id);
    Journal getJournalByID(int idJournal);
 }

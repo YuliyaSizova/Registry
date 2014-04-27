@@ -4,6 +4,7 @@
     Author     : ASUS
 --%>
 
+<%@page import="Objects.Ticket"%>
 <%@page import="Objects.Patient"%>
 <%@page import="Objects.Journal"%>
 <%@page import="java.util.List"%>
@@ -27,25 +28,35 @@
             List<Journal> jo = (List<Journal>) J;
             Object p = request.getAttribute("patient");
             Patient pa = (Patient) p;
-            Object t = request.getAttribute("id_ticket");
-            int id_ticket = (Integer) t;
+            Object t = request.getAttribute("ticket");
+            Ticket ticket = (Ticket) t;
 
         %>
 
 
         <a class="other" href="http://localhost:8084/Registry/showPatient/?patient_id=<%=pa.getId_patient()%>">Вернуться на страницу пациента</a><br><br>
-        <%if(id_ticket!=0) {%>
-        <form  name="visit" action="addVisit/" >
+        <%if (ticket.getId_ticket() != 0) {%>
+        <form  name="visit" action="/Registry/addVisit/" >
             <a href="/Registry/Patient/sickList.jsp"> Больничный </a> <br>
-            Добавте запись в электронную карту пациента: <br> 
-            № талона:   <%=id_ticket%><br>
+            <br> 
+            <b> № талона: </b>  <%=ticket.getId_ticket()%><br>
+            <b>Причина посещения:</b>   <%=ticket.getPrimary_diagnosis()%><br>
+            <i>Добавте запись в электронную карту пациента:</i><br>
             <textarea  name="blank"  cols="70">
             </textarea><br>
+            <input type="hidden" name="patient_id" value="<%=pa.getId_patient()%>" />
+            <input type="hidden" name="id_ticket" value="<%=ticket.getId_ticket()%>" /> 
             Лекарства:         <input type="text" name="med" value="" size="80" /><br>
-            
-            <input type="submit" value="Добавить запись" class="selectH" />
+
+            <input type="submit" value="Добавить запись" class="selectH" /><br>
+
         </form>
-       <%} else out.print("Для приема пациент должен взять талон!");%>
+        <form name="sick" action = "/Registry/Patient/sickList.jsp" >
+            <input type="hidden" name="patient_id" value="<%=pa.getId_patient()%>" /> 
+            <input type="submit" value="Больничные"  />
+        </form>
+        <%} else
+                out.print("Для приема пациент должен взять талон!");%>
         <br>
         <% String hr = "-----------------------------------------";%>
         <b>Предыдущие посещения:</b><br><%=hr%><br>

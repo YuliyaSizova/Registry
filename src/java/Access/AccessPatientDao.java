@@ -22,6 +22,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -163,7 +165,7 @@ public class AccessPatientDao extends Abstract implements PatientDao {
                     + "INNER JOIN Visit_time AS ti ON vg.id_time=ti.id_time) "
                     + "INNER JOIN Doctor AS d ON d.id_doctor=t.id_doctor) "
                     + "INNER JOIN Dates AS da ON da.id_date=vg.id_date\n "
-                    + "WHERE t.id_patient=?"
+                    + "WHERE t.id_patient=? order by da.daten desc"
             );
             st.setInt(1, id_patient);
             ResultSet rs = st.executeQuery();
@@ -359,10 +361,10 @@ public class AccessPatientDao extends Abstract implements PatientDao {
     }
 
     @Override
-    public int getTicket(int doctor_id, int patient_id) {
+    public Ticket getTicket(int doctor_id, int patient_id) {
         try (Connection con = getConn()) {
 
-            PreparedStatement st = con.prepareStatement("select top 1 t.id_ticket"
+            PreparedStatement st = con.prepareStatement("select top 1 t.id_ticket, t.primary_diagnosis "
                     + " from Ticket t where ((select j.id_ticket from Journal j"
                     + " where j.id_ticket= (select distinct top 1  t.id_ticket "
                     + "FROM Ticket AS t,  Patient AS p, Doctor AS d "
@@ -375,12 +377,31 @@ public class AccessPatientDao extends Abstract implements PatientDao {
             st.setInt(4, doctor_id);
             ResultSet rs = st.executeQuery();
              rs.next();
-            int Id_ticket = rs.getInt("id_ticket");
-            return Id_ticket;
+             Ticket t = new Ticket();
+             t.setId_ticket(rs.getInt("id_ticket"));
+             t.setPrimary_diagnosis(rs.getString("primary_diagnosis"));
+            
+            return t;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return 0;
+            Ticket t=new Ticket();
+            t.setId_ticket(0);
+            return t;
         }
     }
+
+    @Override
+    public void addJournal(Journal jo) {
+       try (Connection con = getConn()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Journal (id_ticket,med, diagnosis) VALUES (?,?,?)");
+            ps.setInt(1, jo.getTicket().getId_ticket());
+            ps.setString(2, jo.getMed());
+            ps.setString(3, jo.getDiagnosis());
+            
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }   }
 }

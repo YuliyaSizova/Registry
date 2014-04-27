@@ -40,7 +40,7 @@
         <b>Врач: </b><%= j.getTicket().getDoctor().getSurname()%> <%= j.getTicket().getDoctor().getName()%>
         <%= j.getTicket().getDoctor().getPatronymic()%><br>
         <i><%=j.getTicket().getDoctor().getProfile()%></i><br>             
-    <%= j.getDiagnosis()%> <br>
+    <b>Запись о посещении: </b><%= j.getDiagnosis()%> <br>
     
     <b>Выписанные лекарства: </b><%= j.getMed()%>
     <br>-----------------------------------------<br>

@@ -20,8 +20,8 @@
 <jsp:useBean id="user" scope="session" class="Objects.User" />
 <%
     if ( !security.isUserAccepted(user)) {
-        out.print("You shall no pass!");
-        out.print("<a href=\"" + request.getContextPath()+ "\">обратно</a>");
+        out.print("Доступ к странице ограничен!");
+        out.print("<a href=\"" + request.getContextPath()+ "\"> На главную.</a>");
         out.close();
         return;
     }

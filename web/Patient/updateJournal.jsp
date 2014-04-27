@@ -32,8 +32,9 @@
         <form name="update journal form" action="/Registry/updateJournal/" method="POST">
             <input type="hidden" name="Id_journal" value="<%= journal.getId_journal()%>" />
             <input type="hidden" name="id_patient" value="<%= request.getParameter("id_patient")%>" />
-            <input type="text" name="med" value="<%= journal.getMed()%>" />
-            <input type="text" name="diagnosis" value="<%= journal.getDiagnosis()%>" />
+            
+            <b>Результат посещения: </b><input type="text" name="diagnosis" size="56"  value="<%= journal.getDiagnosis()%>" /><br>
+            <b>Лекарства: </b><input type="text" name="med" size="56" value="<%= journal.getMed()%>" /><br>
             <input type="submit" value="Сохранить" />
         </form>
          

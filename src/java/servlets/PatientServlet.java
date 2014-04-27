@@ -4,18 +4,14 @@
  */
 package servlets;
 
-import Access.AccessTableFactory;
+
 import Dao.PatientDao;
 import Objects.Journal;
 import Objects.Patient;
+import Objects.Ticket;
 import Objects.User;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import fabric.DaoMaster;
-import fabric.TableFactory;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,10 +19,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.tomcat.jni.Time;
+
 
 @WebServlet(name = "PatientServlet", loadOnStartup = 1, urlPatterns = {"/showPatient/",
-    "/history/", "/visit/","/currentDay/","/addVisit/", "/editJournalForm/", "/updateJournal/"})
+    "/history/", "/visit/","/currentDay/","/addVisit/", "/editJournalForm/", "/updateJournal/","/showSickList/"})
 public class PatientServlet extends HttpServlet {
 
     private PatientDao patientDao = DaoMaster.getPatientDao();
@@ -81,6 +77,10 @@ public class PatientServlet extends HttpServlet {
             }
             case "/updateJournal/": {
                 updateJournal(request, response);
+                break;
+            }
+             case "/showSickList/": {
+                showSickList(request, response);
                 break;
             }
         }
@@ -144,8 +144,8 @@ public class PatientServlet extends HttpServlet {
         int patientID = Integer.parseInt(request.getParameter("patient_id"));
         List<Journal> jo = patientDao.getPatientHistoryForDoc(patientID,doctorID);
         Patient patient = patientDao.getByID(patientID);
-        int id_ticket = patientDao.getTicket(doctorID, patientID);
-        request.setAttribute("id_ticket", id_ticket);
+        Ticket ticket = patientDao.getTicket(doctorID, patientID);
+        request.setAttribute("ticket", ticket);
         request.setAttribute("patient", patient);
         request.setAttribute("journal", jo);
         request.getRequestDispatcher("/Patient/patientVisit.jsp").forward(request, response);
@@ -158,20 +158,35 @@ public class PatientServlet extends HttpServlet {
     int doctorID = user.getDoctor().getId_doctor();
     
    
-//    dat= format(dat);
+
      List<Patient> patientList = patientDao.getByDoctorIdDate_Patient(doctorID, new java.util.Date());
         request.setAttribute("patientList", patientList);
          request.getRequestDispatcher("/Doctor/listPatient.jsp").forward(request, response);
     }
-//    String format (Date v){
-//        SimpleDateFormat s = new SimpleDateFormat("mm-dd-yyyy");
-//                return s.format(v);
-//    }
 
-   private void addVisit(HttpServletRequest request, HttpServletResponse response) {
 
+   private void addVisit(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
         String med = request.getParameter("med");
         String blank = request.getParameter("blank");
+        int id_ticket = Integer.parseInt(request.getParameter("id_ticket"));
+        Journal jo = new Journal();
+        jo.setMed(med);
+        jo.setDiagnosis(blank);
+        Ticket t = new Ticket();
+        t.setId_ticket(id_ticket);
+        jo.setTicket(t);
+        patientDao.addJournal(jo);
+          HttpSession session = request.getSession();
+        User user=(User) session.getAttribute("user");
+        int doctorID = user.getDoctor().getId_doctor();
+        int patientID = Integer.parseInt(request.getParameter("patient_id"));
+        List<Journal> j = patientDao.getPatientHistoryForDoc(patientID,doctorID);
+        Patient patient = patientDao.getByID(patientID);
+        Ticket ticket = patientDao.getTicket(doctorID, patientID);
+        request.setAttribute("ticket", ticket);
+        request.setAttribute("patient", patient);
+        request.setAttribute("journal", j);
+        request.getRequestDispatcher("/Patient/patientVisit.jsp").forward(request, response);
 
     }
     private void editJournalForm(HttpServletRequest request, HttpServletResponse response)
@@ -196,6 +211,11 @@ public class PatientServlet extends HttpServlet {
         journal.setId_journal(idJournal);
         patientDao.updateJournal(journal);
         response.sendRedirect(request.getContextPath() + "/visit/?patient_id=" + request.getParameter("id_patient"));
+    }
+
+    private void showSickList(HttpServletRequest request, HttpServletResponse response)  
+            throws ServletException, IOException {  
+    
     }
 }
 
