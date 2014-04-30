@@ -37,7 +37,7 @@
         <a class="other" href="http://localhost:8084/Registry/showPatient/?patient_id=<%=pa.getId_patient()%>">Вернуться на страницу пациента</a><br><br>
         <%if (ticket.getId_ticket() != 0) {%>
         <form  name="visit" action="/Registry/addVisit/" >
-            <a href="/Registry/Patient/sickList.jsp"> Больничный </a> <br>
+            
             <br> 
             <b> № талона: </b>  <%=ticket.getId_ticket()%><br>
             <b>Причина посещения:</b>   <%=ticket.getPrimary_diagnosis()%><br>
@@ -51,8 +51,9 @@
             <input type="submit" value="Добавить запись" class="selectH" /><br>
 
         </form>
-        <form name="sick" action = "/Registry/Patient/sickList.jsp" >
-            <input type="hidden" name="patient_id" value="<%=pa.getId_patient()%>" /> 
+        <form name="sick" action = "<%= request.getContextPath()%>/showSickList" >
+            <input type="hidden" name="id_ticket" value="<%=ticket.getId_ticket()%>" /> 
+            <input type="hidden" name="id_patient" value="<%=pa.getId_patient()%>" /> 
             <input type="submit" value="Больничные"  />
         </form>
         <%} else

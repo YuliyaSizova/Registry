@@ -8,6 +8,10 @@ package Objects;
 
 import java.util.Date;
 
+import Objects.Doctor;
+import Objects.Patient;
+import java.util.Date;
+
 /**
  *
  * @author ASUS

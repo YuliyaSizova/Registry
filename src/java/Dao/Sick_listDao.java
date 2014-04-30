@@ -16,5 +16,7 @@ import java.util.List;
  */
 public interface Sick_listDao {
    void addSick_list(Sick_list sick_list);
-   List<Sick_list> getById_Sick_list(int id_sick_list);
+   List<Sick_list> getById_Sick_list(int id_patient);
+   void updateSick_listDateEnd(Sick_list sick_list);
+  
 }
