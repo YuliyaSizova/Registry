@@ -12,7 +12,6 @@ import Objects.Policlinic;
 import Objects.Street;
 import Objects.Ticket;
 import Objects.Visit_time;
-
 import filters.PatientFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,8 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *

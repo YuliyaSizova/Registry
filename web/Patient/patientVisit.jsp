@@ -52,7 +52,7 @@
 
         </form>
         <form name="sick" action = "<%= request.getContextPath()%>/showSickList" >
-            <input type="hidden" name="id_ticket" value="<%=ticket.getId_ticket()%>" /> 
+            
             <input type="hidden" name="id_patient" value="<%=pa.getId_patient()%>" /> 
             <input type="submit" value="Больничные"  />
         </form>

@@ -8,6 +8,7 @@ package Dao;
 
 
 import Objects.Sick_list;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,5 +19,5 @@ public interface Sick_listDao {
    void addSick_list(Sick_list sick_list);
    List<Sick_list> getById_Sick_list(int id_patient);
    void updateSick_listDateEnd(Sick_list sick_list);
-  
+   int openSick(int id_patient, Date date);
 }

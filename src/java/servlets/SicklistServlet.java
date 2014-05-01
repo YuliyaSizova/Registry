@@ -17,21 +17,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Access.AccessSick_listDao;
+import Objects.AnswerBean;
 import java.util.List;
 
 /**
  *
  * @author Ivan
  */
-@WebServlet(name = "TestServlet", loadOnStartup = 1, urlPatterns = {"/showSickList","/addSickList", "/updateSickList"})
+@WebServlet(name = "TestServlet", loadOnStartup = 1, urlPatterns = {"/showSickList", "/addSickList", "/updateSickList"})
 public class SicklistServlet extends HttpServlet {
 
     private final AccessSick_listDao sickListDao = new AccessSick_listDao();
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -50,7 +50,7 @@ public class SicklistServlet extends HttpServlet {
                 updateSickList(request, response);
                 break;
             }
-              case "/showSickList": {
+            case "/showSickList": {
                 showSickList(request, response);
                 break;
             }
@@ -59,8 +59,7 @@ public class SicklistServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -74,8 +73,7 @@ public class SicklistServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -107,17 +105,45 @@ public class SicklistServlet extends HttpServlet {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         formatter.setLenient(false);
         try {
+            if (request.getParameter("date_begin") == "" || request.getParameter("date_end") == "" || request.getParameter("diagnosis").isEmpty()) {
+                AnswerBean answer = (AnswerBean) request.getSession().getAttribute("addAnswer");
+                answer.setMessage("Проверьте введенные данные");
+                int idPatient = Integer.parseInt(request.getParameter("id_patient"));
+                request.setAttribute("id_patient", idPatient);
+                List<Sick_list> l = sickListDao.getById_Sick_list(idPatient);
+                request.setAttribute("list", l);
+                int id = sickListDao.openSick(idPatient, new java.util.Date());
+                request.setAttribute("open", id);
+
+                request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
+                return;
+                // выкинуть на страницу с ошибкой
+            }
+
             int idDoctor = Integer.parseInt(request.getParameter("id_doctor"));
             int idPatient = Integer.parseInt(request.getParameter("id_patient"));
             Date dateBegin = formatter.parse(request.getParameter("date_begin"));
             Date dateEnd = formatter.parse(request.getParameter("date_end"));
+            if (dateBegin.after(dateEnd)) {
+                AnswerBean answer = (AnswerBean) request.getSession().getAttribute("addAnswer");
+                answer.setMessage("Следите за датами!");
+
+                request.setAttribute("id_patient", idPatient);
+                List<Sick_list> l = sickListDao.getById_Sick_list(idPatient);
+                request.setAttribute("list", l);
+                int id = sickListDao.openSick(idPatient, new java.util.Date());
+                request.setAttribute("open", id);
+
+                request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
+                return;
+            }
             String diagnosis = request.getParameter("diagnosis");
-            
+
             Doctor doc = new Doctor();
             doc.setId_doctor(idDoctor);
             Patient pat = new Patient();
             pat.setId_patient(idPatient);
-            
+
             Sick_list sickList = new Sick_list();
             sickList.setDate_begin(dateBegin);
             sickList.setDate_end(dateEnd);
@@ -125,6 +151,11 @@ public class SicklistServlet extends HttpServlet {
             sickList.setDoctor(doc);
             sickList.setPatient(pat);
             sickListDao.addSick_list(sickList);
+            request.setAttribute("id_patient", idPatient);
+            List<Sick_list> l = sickListDao.getById_Sick_list(idPatient);
+            request.setAttribute("list", l);
+            int id = sickListDao.openSick(idPatient, new java.util.Date());
+            request.setAttribute("open", id);
             request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
         } catch (ParseException e) {
             throw new ServletException(e);
@@ -135,33 +166,42 @@ public class SicklistServlet extends HttpServlet {
             throws IOException, ServletException {
         /*
          * "UPDATE Sick_list SET"
-                    + " date_end=?"
-                    + " WHERE id_sick_list=?"
+         + " date_end=?"
+         + " WHERE id_sick_list=?"
          */
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         formatter.setLenient(false);
         try {
             int idSickList = Integer.parseInt(request.getParameter("id_sick_list"));
             Date dateEnd = formatter.parse(request.getParameter("date_end"));
-            
+
             Sick_list sickList = new Sick_list();
             sickList.setDate_end(dateEnd);
             sickList.setId_sick_list(idSickList);
             sickListDao.updateSick_listDateEnd(sickList);
+            int id_p = Integer.parseInt(request.getParameter("id_patient"));
+            request.setAttribute("id_patient", id_p);
+            List<Sick_list> l = sickListDao.getById_Sick_list(id_p);
+            request.setAttribute("list", l);
+            int id = sickListDao.openSick(id_p, new java.util.Date());
+            request.setAttribute("open", id);
             request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
         } catch (ParseException e) {
             throw new ServletException(e);
         }
     }
 
-    private void showSickList(HttpServletRequest request, HttpServletResponse response)  
-            throws IOException, ServletException {     
+    private void showSickList(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         int id_p = Integer.parseInt(request.getParameter("id_patient"));
-        int id_t = Integer.parseInt(request.getParameter("id_ticket"));
-        List<Sick_list> l =sickListDao.getById_Sick_list(id_p);
-         request.setAttribute("list", l);
-        request.setAttribute("ticket", id_t);
+
+        List<Sick_list> l = sickListDao.getById_Sick_list(id_p);
+        request.setAttribute("list", l);
+        int id = sickListDao.openSick(id_p, new java.util.Date());
+        request.setAttribute("open", id);
+        request.setAttribute("id_patient", id_p);
+
         request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
-        
-               }
+
+    }
 }

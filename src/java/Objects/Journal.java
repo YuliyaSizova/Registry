@@ -13,7 +13,7 @@ package Objects;
 public class Journal {
    private int id_journal;
    private Ticket ticket;
-   private Sick_list sick_list;
+  
    private String diagnosis;
    private String med="";
 
@@ -48,16 +48,6 @@ public class Journal {
     /**
      * @return the sick_list
      */
-    public Sick_list getSick_list() {
-        return sick_list;
-    }
-
-    /**
-     * @param sick_list the sick_list to set
-     */
-    public void setSick_list(Sick_list sick_list) {
-        this.sick_list = sick_list;
-    }
 
     /**
      * @return the diagnosis
