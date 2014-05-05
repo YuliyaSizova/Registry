@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Access.AccessSick_listDao;
-import Objects.AnswerBean;
+import fabric.AnswerBean;
 import java.util.List;
 
 /**
@@ -126,7 +126,7 @@ public class SicklistServlet extends HttpServlet {
             Date dateEnd = formatter.parse(request.getParameter("date_end"));
             if (dateBegin.after(dateEnd)) {
                 AnswerBean answer = (AnswerBean) request.getSession().getAttribute("addAnswer");
-                answer.setMessage("Следите за датами!");
+                answer.setMessage("Дата начала после даты окончания!");
 
                 request.setAttribute("id_patient", idPatient);
                 List<Sick_list> l = sickListDao.getById_Sick_list(idPatient);
@@ -172,8 +172,34 @@ public class SicklistServlet extends HttpServlet {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         formatter.setLenient(false);
         try {
+            if(request.getParameter("date_end") == "" ){
+            
+             AnswerBean answer = (AnswerBean) request.getSession().getAttribute("addAnswer");
+                answer.setMessage("Следите за датами!");
+              int id_p = Integer.parseInt(request.getParameter("id_patient"));
+            request.setAttribute("id_patient", id_p);
+            List<Sick_list> l = sickListDao.getById_Sick_list(id_p);
+            request.setAttribute("list", l);
+            int id = sickListDao.openSick(id_p, new java.util.Date());
+            request.setAttribute("open", id);
+            request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
+
+            }
             int idSickList = Integer.parseInt(request.getParameter("id_sick_list"));
             Date dateEnd = formatter.parse(request.getParameter("date_end"));
+      Date dateBegin = formatter.parse(request.getParameter("date_begin"));
+     
+            if (dateBegin.after(dateEnd)) {
+                AnswerBean answer = (AnswerBean) request.getSession().getAttribute("addAnswer");
+                answer.setMessage("Дата начала после даты окончания!");
+              int id_p = Integer.parseInt(request.getParameter("id_patient"));
+            request.setAttribute("id_patient", id_p);
+            List<Sick_list> l = sickListDao.getById_Sick_list(id_p);
+            request.setAttribute("list", l);
+            int id = sickListDao.openSick(id_p, new java.util.Date());
+            request.setAttribute("open", id);
+            request.getRequestDispatcher("/Patient/sickList.jsp").forward(request, response);
+}
 
             Sick_list sickList = new Sick_list();
             sickList.setDate_end(dateEnd);

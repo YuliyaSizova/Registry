@@ -5,7 +5,7 @@
  */
 package fabric;
 
-import Dao.DateDao;
+
 import Dao.DoctorDao;
 import Dao.HouseDao;
 import Dao.UserDao;
@@ -29,7 +29,7 @@ public abstract class TableFactory {
 
    
 
-    public abstract DateDao makeDate();
+
 
     public abstract StreetDao makeStreet();
 

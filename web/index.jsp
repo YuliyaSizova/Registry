@@ -16,8 +16,8 @@
     <body>
          <jsp:include page="<%= HtmlBuilder.CHOOSE_HEADER %>" />
        
-         <p align="right"> <a class="other" href="loging.jsp">Зарегистрировать пациента</a></p>
-         <jsp:useBean id="addAnswer" scope="session" class="Objects.AnswerBean" />
+         <p align="right"> <a class="other" href="">Зарегистрировать пациента</a></p>
+         <jsp:useBean id="addAnswer" scope="session" class="fabric.AnswerBean" />
         <%
             String answer = addAnswer.getMessage();
             // Мы пытаемся считать сообщение о том, была или не была

@@ -1,4 +1,4 @@
-package Objects;
+package fabric;
 
 /**
  * Внутри этого класса мы передаём сообщение о том,

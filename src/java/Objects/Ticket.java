@@ -12,7 +12,7 @@ package Objects;
  */
 public class Ticket {
     private int id_ticket;
-    private String primary_diagnosis;
+    private String primary_diagnosis = "";
     private Doctor doctor;
     private Patient patien;
     private int id_grid;

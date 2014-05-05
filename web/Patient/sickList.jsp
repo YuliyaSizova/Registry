@@ -1,5 +1,6 @@
 
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Objects.User"%>
 <%@page import="Objects.Doctor"%>
 <%@page import="Objects.Sick_list"%>
@@ -33,7 +34,7 @@
             Integer patient = (Integer) p;
             %>
 <a class="other" href="http://localhost:8084/Registry/visit/?patient_id=<%=patient.intValue()%>">Вернуться на страницу приема</a><br>
- <jsp:useBean id="addAnswer" scope="session" class="Objects.AnswerBean" />
+ <jsp:useBean id="addAnswer" scope="session" class="fabric.AnswerBean" />
         <%
             String answer = addAnswer.getMessage();
             // Мы пытаемся считать сообщение о том, была или не была
@@ -85,6 +86,9 @@ if (open.intValue() == 0)
         <% if (li.getDate_end().after(new java.util.Date())) {%>
         <form name="update date" action="<%= request.getContextPath()%>/updateSickList" method="GET">
             <br>   Продлить больничный:<br>
+            <% SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        formatter.setLenient(false);%>
+        <input type="hidden" value="<%=formatter.format(li.getDate_begin())  %>" name="date_begin" />
             <input type="hidden" value="<%=patient.intValue()%>" name="id_patient" />
             <input type="hidden" value="<%=li.getId_sick_list()%>" name="id_sick_list" >
             Дата окончания: <input type="text"  name="date_end"

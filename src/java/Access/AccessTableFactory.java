@@ -5,7 +5,7 @@
  */
 package Access;
 
-import Dao.DateDao;
+
 import Dao.DoctorDao;
 import Dao.HouseDao;
 import Dao.UserDao;
@@ -38,10 +38,7 @@ public class AccessTableFactory extends TableFactory {
     }
 
   
-    @Override
-    public DateDao makeDate() {
-        return new AccessDateDao();
-    }
+  
 
     @Override
     public StreetDao makeStreet() {
@@ -62,6 +59,8 @@ public class AccessTableFactory extends TableFactory {
     public WorktimeDao makeWorktime() {
         return new AccessWorktimeDao();
     }
+
+  
 
     
 }

@@ -9,7 +9,7 @@ import Access.AccessTableFactory;
 import Connection.Abstract;
 import Dao.UserDao;
 import Dao.PatientDao;
-import Objects.AnswerBean;
+import fabric.AnswerBean;
 import Objects.User;
 import fabric.DaoMaster;
 import fabric.TableFactory;
